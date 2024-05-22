@@ -8,7 +8,9 @@ extension GraphTraversing {
         testPlan: String?,
         includedTargets: Set<String>,
         excludedTargets: Set<String>,
-        excludingExternalTargets: Bool = false
+        excludingExternalTargets: Bool = false,
+        excludingNotTestTargets: Bool = false,
+        excludingUITestTargets: Bool = false
     ) -> Set<GraphTarget> {
         let allTestPlansTargetNames: Set<String>?
         if includedTargets.isEmpty, let testPlanName = testPlan, let testPlan = self.testPlan(name: testPlanName) {
@@ -27,6 +29,12 @@ extension GraphTraversing {
                     return includedTargets.contains(target.target.name)
                 }
                 if excludedTargets.contains(target.target.name) {
+                    return false
+                }
+                if excludingNotTestTargets && ![.uiTests, .unitTests].contains(target.target.product) {
+                    return false
+                }
+                if excludingUITestTargets && target.target.product == .uiTests {
                     return false
                 }
                 return excludingExternalTargets ? allInternalTargets.contains(target.target.name) : true

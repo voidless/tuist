@@ -29,15 +29,18 @@ public final class FocusTargetsGraphMappers: GraphMapping {
     /// The targets name to be kept as non prunable with their respective dependencies and tests targets
     public let includedTargets: Set<String>
     public let excludedTargets: Set<String>
+    public let skipUITests: Bool
 
     public init(
         testPlan: String? = nil,
         includedTargets: Set<String>,
-        excludedTargets: Set<String> = []
+        excludedTargets: Set<String> = [],
+        skipUITests: Bool
     ) {
         self.testPlan = testPlan
         self.includedTargets = includedTargets
         self.excludedTargets = excludedTargets
+        self.skipUITests = skipUITests
     }
 
     public func map(graph: Graph) throws -> (Graph, [SideEffectDescriptor]) {
@@ -48,7 +51,9 @@ public final class FocusTargetsGraphMappers: GraphMapping {
             testPlan: testPlan,
             includedTargets: includedTargets,
             excludedTargets: excludedTargets,
-            excludingExternalTargets: true
+            excludingExternalTargets: true,
+            excludingNotTestTargets: true,
+            excludingUITestTargets: skipUITests
         )
 
         let unavailableIncludedTargets = Set(includedTargets).subtracting(userSpecifiedSourceTargets.map(\.target.name))

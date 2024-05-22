@@ -57,7 +57,8 @@ public class GeneratorFactory: GeneratorFactorying {
             testsCacheDirectory: testsCacheDirectory,
             testPlan: testPlan,
             includedTargets: includedTargets,
-            excludedTargets: excludedTargets
+            excludedTargets: excludedTargets,
+            skipUITests: skipUITests
         )
         let workspaceMappers = workspaceMapperFactory.automation()
         let manifestLoader = ManifestLoaderFactory().createManifestLoader()

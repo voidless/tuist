@@ -15,7 +15,8 @@ protocol GraphMapperFactorying {
         testsCacheDirectory: AbsolutePath,
         testPlan: String?,
         includedTargets: Set<String>,
-        excludedTargets: Set<String>
+        excludedTargets: Set<String>,
+        skipUITests: Bool
     ) -> [GraphMapping]
 
     /// Returns the default graph mapper that should be used from all the commands that require loading and processing the graph.
@@ -33,14 +34,16 @@ public final class GraphMapperFactory: GraphMapperFactorying {
         testsCacheDirectory _: AbsolutePath,
         testPlan: String?,
         includedTargets: Set<String>,
-        excludedTargets: Set<String>
+        excludedTargets: Set<String>,
+        skipUITests: Bool
     ) -> [GraphMapping] {
         var mappers: [GraphMapping] = []
         mappers.append(
             FocusTargetsGraphMappers(
                 testPlan: testPlan,
                 includedTargets: includedTargets,
-                excludedTargets: excludedTargets
+                excludedTargets: excludedTargets,
+                skipUITests: skipUITests
             )
         )
         mappers.append(TreeShakePrunedTargetsGraphMapper())
